@@ -17,15 +17,15 @@ for i=1:length(is)
 end
 [sims, sims_idx] = sort(sims,'descend');
 
-filenames = cell(1, length(files))
+filenames = cell(1, length(files));
 for i=1:length(files)
 	filenames{i} = files(i).name;
 end
 
-sims_rec = fopen('sims.csv', 'w')
+sims_rec = fopen('sims/sims_300.csv', 'w');
 
 for i=1:length(sims)
 	fprintf(sims_rec, '%s, %s, %6f\n', filenames{is(sims_idx(i))}, filenames{js(sims_idx(i))}, sims(i));
 end
 
-fclose(sims_rec)
+fclose(sims_rec);
