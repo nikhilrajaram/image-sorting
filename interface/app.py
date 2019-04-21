@@ -9,12 +9,15 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__, template_folder='views')
 
 # INDEX = os.path.join(os.path.dirname(__file__), 'index.csv')
-
+img_folder = os.path.join('static', 'PhotoSorter_images')
 
 # main route
 @app.route('/')
 def index():
-    return render_template('index.html')
+    imgs = os.listdir('static/PhotoSorter_images')
+    imgs = [os.path.join(img_folder, file) for file in imgs]
+    imgs = imgs[0:2]
+    return render_template('index.html', imgs = imgs)
 
 
 @app.route('/search', methods=['POST'])
