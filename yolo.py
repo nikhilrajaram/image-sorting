@@ -3,6 +3,7 @@ import argparse
 import numpy as np
 
 # https://www.arunponnusamy.com/yolo-object-detection-opencv-python.html
+# weights: https://pjreddie.com/media/files/yolov3.weights
 
 img = "interface/static/PhotoSorter_images/0100.jpg"
 weights_file = "yolo/yolov3.weights"
@@ -98,6 +99,8 @@ for i in indices:
 
     draw_bounding_box(image, class_ids[i], confidences[i], round(x), round(y), round(x+w), round(y+h))
 
+print()
+
 # display output image
 cv2.imshow("object detection", image)
 
@@ -105,7 +108,9 @@ cv2.imshow("object detection", image)
 cv2.waitKey()
 
  # save output image to disk
-cv2.imwrite("object-detection.jpg", image)
+# cv2.imwrite("object-detection.jpg", image)
+print("Classes:")
+print([classes[class_ids[i]] for i in indices])
 
 # release resources
 cv2.destroyAllWindows()
