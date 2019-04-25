@@ -3,7 +3,7 @@
 
 <head>
 
-  <title>Image Search</title>
+  <title>Photo Sortratron 9001</title>
 
   <!-- stylesheets -->
   <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -31,8 +31,17 @@
         <br />
         <!-- <a href="???">Duplicate Finder</a> -->
         <a href="compare">Compare Images</a>
+        <form action="/compare">
+          <input type="text" placeholder="Image 1" name="id1">
+          <input type="text" placeholder="Image 2" name="id2">
+          <button type="submit">Compare</button>
+        </form>
         <br />
         <a href="image">Detailed Info of Image</a>
+        <form action="/image">
+          <input type="text" placeholder="Image" name="id">
+          <button type="submit">Get Info</button>
+        </form>
         <br />
       </div>
 

@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
 from werkzeug.utils import secure_filename
 
 
@@ -8,11 +8,8 @@ UPLOAD_FOLDER = 'static/upload'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 class_list = []
 with open("../yolo/yolov3.txt", 'rb') as f:
-    # for line in f:
-    #     class_list.append(line)
     class_list = f.read().splitlines()
 class_list = [line.decode("utf-8")  for line in class_list]
-print(class_list)
 
 # create flask instance
 app = Flask(__name__, template_folder='views')
@@ -41,6 +38,10 @@ def image():
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
     # /compare?id1=0100.png&id2=0101.png
+    # if request.method == 'POST':
+    #     im1 = request.form['im1']
+    #     im2 = request.form['im2']
+    #     redirect("/compare?id1=" + im1 + "&id2=" + im2)
     img_id1 = request.args.get('id1', default = "", type = str)
     img_path1 = os.path.join(img_folder, img_id1)
     img_id2 = request.args.get('id2', default = "", type = str)
