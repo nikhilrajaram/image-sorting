@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 
 
@@ -83,6 +83,7 @@ def upload_file():
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect("/upload/" + filename)
 
     return '''
         <!doctype html>
@@ -94,7 +95,7 @@ def upload_file():
         </form>
         '''
 
-@app.route('/uploads/<filename>')
+@app.route('/upload/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
