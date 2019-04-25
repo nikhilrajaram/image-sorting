@@ -5,7 +5,7 @@ import numpy as np
 # https://www.arunponnusamy.com/yolo-object-detection-opencv-python.html
 # weights: https://pjreddie.com/media/files/yolov3.weights
 
-img = "interface/static/PhotoSorter_images/0100.jpg"
+img = "img/paris_general_000001.jpg"
 weights_file = "yolo/yolov3.weights"
 cfg_file = "yolo/yolov3.cfg"
 classes_file = "yolo/yolov3.txt"
