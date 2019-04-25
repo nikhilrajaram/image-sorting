@@ -40,12 +40,17 @@ def findDuplicates(distance = 10, hash_size = 8):
     compared = {(img_names[i], img_names[j]): compareHashes(x, y) for i,x in enumerate(hashes) for j,y in enumerate(hashes) if i != j}
 
     # save to json
-    jsonf = json.dumps(compared)
-    f = open("imageComparisons.json", "w")
-    f.write(jsonf)
-    f.close()
+    # jsonf = json.dumps(compared)
+    # f = open("imageComparisons.json", "w")
+    # f.write(jsonf)
+    # f.close()
     return compared
 
 f = findDuplicates()
 print(f)
 print(len(f))
+print()
+
+for k in f.keys():
+    if f[k] == 0:
+        print(k)

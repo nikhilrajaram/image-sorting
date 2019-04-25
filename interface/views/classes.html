@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>Classes</title>
+
+  <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
+
+  <!-- dep -->
+  <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
+  <script src="{{ url_for('static', filename='main.js') }}" type="text/javascript"></script>
+</head>
+
+<body>
+  <!-- Page Content -->
+  <div class="container center-container">
+
+    <!-- child template -->
+    <!-- {% block content %}{% endblock %} -->
+    <div class="row">
+    <div class="col-md-2">
+      <h2>Filter Classes</h2>
+      <form method=post>
+      {% for i in data %}
+        <input type="checkbox" id="id_{{i}}" name="users" value="{{i}}">
+        <label for="id_{{i}}">{{i}}</label>
+        <br />
+      {% endfor %}
+      <input type=submit value=Update>
+      </form>
+    </div>
+
+    <div class="col-md-8">
+      <h2>Images</h2>
+      <br>
+      <div class="row">
+        {% for img in imgs %}
+          <img src="{{img}}" alt="{{img}}">
+        {% endfor %}
+      </div>
+    </div>
+
+    <br>
+
+    <!-- errors -->
+    {% if error %}
+    <p class="error"><strong>Error:</strong> {{ error }}</p>
+    {% endif %}
+  </div>
+  </div>
+
+
+      <!-- <form method=post>
+      {% for i in data %}
+        <input type="checkbox" id="id_{{i}}" name="users" value="{{i}}">
+        <label for="id_{{i}}">{{i}}</label>
+        <br />
+      {% endfor %}
+      <input type=submit value=Update>
+    </form>
+
+      {% for section in info %}
+          <p>{{ section }}</p>
+      {% endfor %}
+
+
+      {% if error %}
+      <p class="error"><strong>Error:</strong> {{ error }}</p>
+      {% endif %} -->
+
+</body>
+
+</html>
