@@ -4,7 +4,15 @@ from flask import Flask, render_template, request, jsonify, send_from_directory,
 from werkzeug.utils import secure_filename
 
 
-UPLOAD_FOLDER = 'static/upload'
+import sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir)
+from histograms.ImageHistogram import ImageHistogram
+from histograms.KNearestImages import KNearestImages
+
+
+UPLOAD_FOLDER = 'static/uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 class_list = []
 with open("../yolo/yolov3.txt", 'rb') as f:
@@ -17,6 +25,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # INDEX = os.path.join(os.path.dirname(__file__), 'index.csv')
 img_folder = os.path.join('static', 'PhotoSorter_images')
+up_folder = os.path.join('static', 'uploads')
 
 # main route
 @app.route('/')
@@ -33,7 +42,7 @@ def image():
     img_id = request.args.get('id', default = "", type = str)
     img_path = os.path.join(img_folder, img_id)
 
-    return render_template('image.html', img = img_path)
+    return render_template('image.html', img = img_path, info={})
 
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
@@ -95,10 +104,30 @@ def upload_file():
         </form>
         '''
 
-@app.route('/upload/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
+@app.route('/upload/<filename>', methods = ['GET', 'POST'])
+def uploaded_file(filename, clusters=5):
+    clusters = request.args.get('clusters', default = 5, type = int)
+    # if request.method == 'POST':
+    # print(UPLOAD_FOLDER + "/" + filename)
+    # print(clusters)
+
+    IH = ImageHistogram(UPLOAD_FOLDER + "/" + filename, (450, 450))
+    knn = KNearestImages(int(clusters))
+
+    knn.fit()
+    dists, imgs = knn.kneighbors(IH)
+
+    info = {"dists":dists}
+
+    print(os.path.join(UPLOAD_FOLDER, filename))
+
+
+    return render_template('image.html', img=os.path.join(UPLOAD_FOLDER, filename), info=info, f=filename)
+
+    # for img in imgs:
+    #     print('open {} {}'.format(IH.filename.replace('../img/', ''), img))
+    # return send_from_directory(app.config['UPLOAD_FOLDER'],
+    #                            filename)
 
 
 # run!

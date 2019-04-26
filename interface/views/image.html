@@ -14,9 +14,18 @@
 
       <img src="{{img}}" alt="{{img}}">
 
-      {% for section in info %}
-          <p>{{ section }}</p>
+      {% for section in info.keys() %}
+          <h3>{{ section }}</h3>
+          <p>
+            {{info[section]}}
+          </p>
       {% endfor %}
+
+      <h4>Number of Clusters:</h4>
+      <form action="/upload/{{f}}">
+        <input type="text" placeholder="6" name="clusters">
+        <button type="submit">Reevaluate</button>
+      </form>
 
       <!-- error -->
       {% if error %}
