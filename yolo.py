@@ -48,7 +48,7 @@ def draw_bounding_box(img, class_id, colors, confidence, x, y, x_plus_w, y_plus_
     cv2.putText(img, label, (x-10, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
 
-def show_image(image, net, colors, Width, Height, resize):
+def show_image(image, net, classes, colors, Width, Height, resize):
     # run inference through the network
     # and gather predictions from output layers
     outs = net.forward(get_output_layers(net))
@@ -69,7 +69,6 @@ def show_image(image, net, colors, Width, Height, resize):
             class_id = np.argmax(scores)
             confidence = scores[class_id]
             if confidence > 0.5:
-                print(detection[0:4])
                 center_x = int(detection[0] * Width)
                 center_y = int(detection[1] * Height)
                 w = int(detection[2] * Width)
@@ -116,6 +115,30 @@ def show_image(image, net, colors, Width, Height, resize):
     cv2.destroyAllWindows()
 
 
+def get_image_classes(net, classes):
+    # run inference through the network
+    # and gather predictions from output layers
+    outs = net.forward(get_output_layers(net))
+
+    # initialization
+    class_ids = []
+    confidences = []
+
+    # for each detetion from each output layer
+    # get the confidence, class id, bounding box params
+    # and ignore weak detections (confidence < 0.5)
+    for out in outs:
+        for detection in out:
+            scores = detection[5:]
+            class_id = np.argmax(scores)
+            confidence = scores[class_id]
+            if confidence > 0.5:
+                class_ids.append(class_id)
+                confidences.append(float(confidence))
+
+    print("Classes:")
+    print([classes[i] for i in list(set(class_ids))])
+
 if __name__ == '__main__':
     img = "interface/static/PhotoSorter_images/paris_general_000008.jpg"
     weights_file = "yolo/yolov3.weights"
@@ -144,7 +167,7 @@ if __name__ == '__main__':
         else:
             c = 600 / h
 
-        show_image(image, net, colors, w, h, c)
+        show_image(image, net, classes, colors, w, h, c)
 
 
 
