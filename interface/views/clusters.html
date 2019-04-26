@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>Clusters</title>
+
+  <!-- dep -->
+  <!-- <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
+  <script src="{{ url_for('static', filename='main.js') }}" type="text/javascript"></script> -->
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/yeti/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
+  <script src="{{ url_for('static', filename='main.js') }}" type="text/javascript"></script>
+</head>
+
+<body>
+
+      <h4>Number of Clusters:</h4>
+      <form action="/clusters">
+          <input type="text" placeholder="10" name="n_clusters">
+          <button type="submit">Reevaluate</button>
+      </form>
+
+      <div class="row" style="text-align: center;">
+
+      {% for lab in clusters.keys() %}
+         <h1>Cluster {{lab}}</h1>
+          {% for img in clusters[lab] %}
+            <img src="{{img}}" alt="{{img}}">
+          {% endfor %}
+      {% endfor %}
+
+      </div>
+
+      <!-- error -->
+      {% if error %}
+      <p class="error"><strong>Error:</strong> {{ error }}</p>
+      {% endif %}
+
+</body>
+
+</html>

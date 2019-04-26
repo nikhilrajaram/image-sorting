@@ -20,6 +20,8 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir)
 from histograms.ImageHistogram import ImageHistogram
 from histograms.KNearestImages import KNearestImages
+from sklearn.cluster import KMeans
+import numpy as np
 
 
 UPLOAD_FOLDER = 'static/uploads'
@@ -155,6 +157,30 @@ def uploaded_file(filename, clusters=5):
     #     print('open {} {}'.format(IH.filename.replace('../img/', ''), img))
     # return send_from_directory(app.config['UPLOAD_FOLDER'],
     #                            filename)
+
+
+
+
+
+
+@app.route('/clusters', methods = ['GET', 'POST'])
+def clusters(clusters=5):
+    n_clusters = request.args.get('n_clusters', default = 10, type = int)
+
+    img_dir = 'static/PhotoSorter_images/'
+    with open('../histograms/data/filenames.txt') as f:
+        files = [_.strip('\n') for _ in f.readlines()]
+
+    hists = np.load('../histograms/data/hists.npy', allow_pickle=True)
+
+    kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(hists)
+
+    files_clusters = {i: [] for i in range(n_clusters)}
+
+    for i, lab in enumerate(kmeans.labels_):
+        files_clusters[lab].append(os.path.join(img_dir, files[i]))
+
+    return render_template('clusters.html', clusters=files_clusters)
 
 
 # run!
