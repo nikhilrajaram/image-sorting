@@ -26,8 +26,7 @@
       {% endfor %}
 
       <h4>Number of Related Images:</h4>
-      <form action="/image">
-        <input type="hidden" name="id" value="{{f}}" /> 
+      <form action="/upload/{{f}}">
         <input type="text" placeholder="5" name="clusters">
         <button type="submit">Reevaluate</button>
       </form>

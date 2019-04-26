@@ -1,97 +1,15 @@
-
-// ----- custom js ----- //
-
-// hide initial
-$("#searching").hide();
-$("#results-table").hide();
 $("#error").hide();
 
-// global
-var url = 'http://static.pyimagesearch.com.s3-us-west-2.amazonaws.com/vacation-photos/dataset/';
-var data = [];
-
-$(function() {
-
-  // sanity check
-  console.log( "ready!" );
-
-  // image click
-  $(".img").click(function() {
-
-    // empty/hide results
-    $("#results").empty();
-    $("#results-table").hide();
-    $("#error").hide();
-
-    // remove active class
-    $(".img").removeClass("active")
-
-    // add active class to clicked picture
-    $(this).addClass("active")
-
-    // grab image url
-    var image = $(this).attr("src")
-    console.log(image)
-
-    // show searching text
-    $("#searching").show();
-    console.log("searching...")
-
-    // ajax request
-    $.ajax({
-      type: "POST",
-      url: "/search",
-      data : { img : image },
-      // handle success
-      success: function(result) {
-        console.log(result.results);
-        var data = result.results
-        // show table
-        $("#results-table").show();
-        // loop through results, append to dom
-        for (i = 0; i < data.length; i++) {
-          $("#results").append('<tr><th><a href="'+url+data[i]["image"]+'"><img src="'+url+data[i]["image"]+
-            '" class="result-img"></a></th><th>'+data[i]['score']+'</th></tr>')
-        };
-      },
-      // handle error
-      error: function(error) {
-        console.log(error);
-        // append to dom
-        $("#error").append()
-      }
-    });
-
-  });
-
-});
-
-$(document).ready(function () {
-
-    $("#sidebar").mCustomScrollbar({
-         theme: "minimal"
-    });
-
-    $('#sidebarCollapse').on('click', function () {
-        $('#sidebar').toggleClass('active');
-    });
-
-});
-
-$(document).ready(function () {
-
-    $("#sidebar").mCustomScrollbar({
-         theme: "minimal"
-    });
-
-    $('#sidebarCollapse').on('click', function () {
-        // open or close navbar
-        $('#sidebar').toggleClass('active');
-        // close dropdowns
-        $('.collapse.in').toggleClass('in');
-        // and also adjust aria-expanded attributes we use for the open/closed arrows
-        // in our CSS
-        $('a[aria-expanded=true]').attr('aria-expanded', 'false');
-    });
-
-});
+// $('#checkBox').click(function(e){
+// 	if (e.target.checked) {
+//   	localStorage.checked = true;
+//   } else {
+//   	localStorage.checked = false;
+//   }
+// })
+//
+// $( document ).ready(function() {
+//
+// 	document.querySelector('#checkBox').checked = localStorage.checked
+//
+// });

@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash
 from werkzeug.utils import secure_filename
+import csv
 
 
 import ntpath
@@ -52,7 +53,19 @@ def image():
     img_id = path_leaf(img_id)
     img_path = os.path.join(img_folder, img_id)
 
-    return render_template('image.html', img = img_path, info={}, fromUpload=False)
+    clusters = request.args.get('clusters', default = 5, type = int)
+    print(img_path)
+    IH = ImageHistogram(img_path, (450, 450))
+    knn = KNearestImages(int(clusters))
+
+    knn.fit()
+    dists, imgs = knn.kneighbors(IH)
+
+    info = {"dists":dists}
+
+    imgs = [os.path.join(img_folder, im) for im in imgs]
+
+    return render_template('image.html', img = img_path, info=info, fromUpload=False, f=path_leaf(img_id), imgs=imgs)
 
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
@@ -71,16 +84,18 @@ def compare():
 @app.route('/classes', methods=['GET', 'POST'])
 def classes():
     # /classes
-    img_id1 = request.args.get('id1', default = "", type = str)
-    img_path1 = os.path.join(img_folder, img_id1)
-    img_id2 = request.args.get('id2', default = "", type = str)
-    img_path2 = os.path.join(img_folder, img_id2)
-
+    imgs = []
     if request.method == 'POST':
         selected_users = request.form.getlist("users")
         print(selected_users)
+        with open('../yolo/yolo_classes.csv') as csv_file:
+            csv_reader = csv.reader(csv_file, delimiter=',')
+            for row in csv_reader:
+                for u in selected_users:
+                    if u in row[1:]:
+                        imgs.append(os.path.join(img_folder, row[0]))
 
-    return render_template('classes.html', data=class_list)
+    return render_template('classes.html', data=class_list, imgs=imgs)
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -134,7 +149,7 @@ def uploaded_file(filename, clusters=5):
     imgs = [os.path.join(img_folder, im) for im in imgs]
 
 
-    return render_template('image.html', img=os.path.join(UPLOAD_FOLDER, filename), info=info, f=filename, fromUpload=True, imgs=imgs)
+    return render_template('upload.html', img=os.path.join(UPLOAD_FOLDER, filename), info=info, f=filename, fromUpload=True, imgs=imgs)
 
     # for img in imgs:
     #     print('open {} {}'.format(IH.filename.replace('../img/', ''), img))

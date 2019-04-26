@@ -24,6 +24,7 @@
       <h2>Filter Classes</h2>
       <form method=post>
         <input type=submit value=Update>
+        <br />
         {% for i in data %}
           <input type="checkbox" id="id_{{i}}" name="users" value="{{i}}">
           <label for="id_{{i}}">{{i}}</label>
