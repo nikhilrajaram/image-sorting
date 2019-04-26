@@ -6,13 +6,17 @@
   <title>Image {{img}}</title>
 
   <!-- dep -->
-  <!-- <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
-  <script src="{{ url_for('static', filename='main.js') }}" type="text/javascript"></script> -->
+  <link href="{{ url_for('static', filename='main.css') }}" rel="stylesheet">
+  <script src="{{ url_for('static', filename='main.js') }}" type="text/javascript"></script>
 </head>
 
 <body>
-
-      <img src="{{img}}" alt="{{img}}">
+      {% if fromUpload %}
+          <img src="../{{img}}" alt="{{img}}">
+      {% else %}
+          <img src="{{img}}" alt="{{img}}">
+      {% endif %}
+      <!-- <img src="../{{img}}" alt="{{img}}"> -->
 
       {% for section in info.keys() %}
           <h3>{{ section }}</h3>
@@ -21,11 +25,19 @@
           </p>
       {% endfor %}
 
-      <h4>Number of Clusters:</h4>
+      <h4>Number of Related Images:</h4>
       <form action="/upload/{{f}}">
-        <input type="text" placeholder="6" name="clusters">
+        <input type="text" placeholder="5" name="clusters">
         <button type="submit">Reevaluate</button>
       </form>
+
+      <h2>Related Images</h2>
+      <br>
+      <div class="row">
+        {% for im in imgs %}
+          <img src="../{{im}}" alt="{{im}}">
+        {% endfor %}
+      </div>
 
       <!-- error -->
       {% if error %}

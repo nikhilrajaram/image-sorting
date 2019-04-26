@@ -4,6 +4,15 @@ from flask import Flask, render_template, request, jsonify, send_from_directory,
 from werkzeug.utils import secure_filename
 
 
+import ntpath
+ntpath.basename("a/b/c")
+def path_leaf(path):
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
+
+
+
+
 import sys,inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -40,9 +49,10 @@ def index():
 def image():
     # /image?id=0100.png
     img_id = request.args.get('id', default = "", type = str)
+    img_id = path_leaf(img_id)
     img_path = os.path.join(img_folder, img_id)
 
-    return render_template('image.html', img = img_path, info={})
+    return render_template('image.html', img = img_path, info={}, fromUpload=False)
 
 @app.route('/compare', methods=['GET', 'POST'])
 def compare():
@@ -121,8 +131,10 @@ def uploaded_file(filename, clusters=5):
 
     print(os.path.join(UPLOAD_FOLDER, filename))
 
+    imgs = [os.path.join(img_folder, im) for im in imgs]
 
-    return render_template('image.html', img=os.path.join(UPLOAD_FOLDER, filename), info=info, f=filename)
+
+    return render_template('image.html', img=os.path.join(UPLOAD_FOLDER, filename), info=info, f=filename, fromUpload=True, imgs=imgs)
 
     # for img in imgs:
     #     print('open {} {}'.format(IH.filename.replace('../img/', ''), img))

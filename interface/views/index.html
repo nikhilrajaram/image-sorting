@@ -30,14 +30,14 @@
         <a href="classes">Image Classes</a>
         <br />
         <!-- <a href="???">Duplicate Finder</a> -->
-        <a href="compare">Compare Images</a>
+        <!-- <a href="compare">Compare Images</a>
         <form action="/compare">
           <input type="text" placeholder="Image 1" name="id1">
           <input type="text" placeholder="Image 2" name="id2">
           <button type="submit">Compare</button>
         </form>
-        <br />
-        <a href="image">Detailed Info of Image</a>
+        <br /> -->
+        <h5 href="image">Detailed Info of Image</h4>
         <form action="/image">
           <input type="text" placeholder="Image" name="id">
           <button type="submit">Get Info</button>
@@ -50,7 +50,7 @@
         <br>
         <div class="row">
           {% for img in imgs %}
-            <img src="{{img}}" alt="{{img}}">
+            <a href="/image?id={{img}}"><img src="{{img}}" alt="{{img}}"></a>
           {% endfor %}
         </div>
       </div>
